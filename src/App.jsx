@@ -1,5 +1,5 @@
 import "./App.css";
-import { lazy, Suspense, useState, useMemo, useRef } from "react";
+import { lazy, Suspense, useEffect, useState, useMemo, useRef } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { listings } from "./data";
 import { translations } from "./translations";
@@ -11,6 +11,7 @@ import HeroSection from "./components/HeroSection";
 import ListingsSection from "./components/ListingsSection";
 import ExperiencesSection from "./components/ExperiencesSection";
 import FooterSection from "./components/FooterSection";
+import ThreeIntroOverlay from "./components/ThreeIntroOverlay";
 
 const StayDetailPage = lazy(() => import("./components/StayDetailPage"));
 const CatalogOverlay = lazy(() => import("./components/CatalogOverlay"));
@@ -96,6 +97,7 @@ function App() {
     minGuests: "any",
     services: []
   });
+  const [showIntro, setShowIntro] = useState(true);
   
   const userMenuRef = useRef(null);
   const t = translations[language];
@@ -355,12 +357,34 @@ function App() {
 
   const routeFallback = <div className="pageLoadingState">Cargando...</div>;
 
+  useEffect(() => {
+    const introAlreadySeen = window.sessionStorage.getItem("horizon-intro-seen") === "1";
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (introAlreadySeen || prefersReducedMotion) {
+      setShowIntro(false);
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    window.sessionStorage.setItem("horizon-intro-seen", "1");
+    setShowIntro(false);
+  };
+
   const handleSelectListing = (listingId) => {
     navigate(`/stay/${listingId}`);
   };
 
   return (
-    <Routes>
+    <>
+      {showIntro && (
+        <ThreeIntroOverlay
+          language={language}
+          onComplete={handleIntroComplete}
+        />
+      )}
+
+      <Routes>
       <Route
         path="/demo-login"
         element={
@@ -590,7 +614,8 @@ function App() {
     </div>
         }
       />
-    </Routes>
+      </Routes>
+    </>
   );
 }
 
