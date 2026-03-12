@@ -1,3 +1,5 @@
+import { getOptimizedImageUrl } from "../imageUtils";
+
 function ListingsSection({
   title,
   listings,
@@ -39,7 +41,7 @@ function ListingsSection({
       )}
 
       <div className="listingsGrid">
-        {listings.map((listing) => (
+        {listings.map((listing, index) => (
           <article
             key={listing.id}
             className="listingCard"
@@ -54,7 +56,18 @@ function ListingsSection({
             }}
           >
             <div className="listingImage">
-              <img src={listing.image} alt={listing.title} loading="eager" decoding="async" />
+              <img
+                src={getOptimizedImageUrl(listing.image, { width: 620, height: 410, quality: 66 })}
+                srcSet={[
+                  `${getOptimizedImageUrl(listing.image, { width: 360, height: 240, quality: 62 })} 360w`,
+                  `${getOptimizedImageUrl(listing.image, { width: 620, height: 410, quality: 66 })} 620w`
+                ].join(", ")}
+                sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                alt={listing.title}
+                loading={index < 4 ? "eager" : "lazy"}
+                decoding="async"
+                fetchPriority={index < 2 ? "high" : "auto"}
+              />
               <button
                 className={`favoriteBtn ${favoriteListingIds.includes(listing.id) ? "active" : ""}`}
                 type="button"

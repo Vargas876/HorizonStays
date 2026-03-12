@@ -12,6 +12,23 @@
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+.pageLoadingState {
+  min-height: 40vh;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  letter-spacing: 0.03em;
+}
+
+/* Defer rendering of heavy offscreen blocks until they are near viewport. */
+.listings,
+.experiences,
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+
 #hero,
 #listings,
 #stats,
@@ -179,6 +196,13 @@
   z-index: 1050;
 }
 
+.userMenuDivider {
+  height: 1px;
+  background: rgba(255,255,255,0.09);
+  margin: 4px 0;
+  border-radius: 1px;
+}
+
 .userMenuItem {
   width: 100%;
   border: none;
@@ -191,6 +215,22 @@
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.userMenuItemIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.userMenuItem:hover .userMenuItemIcon,
+.userMenuItem:focus-visible .userMenuItemIcon {
+  opacity: 1;
 }
 
 .userMenuItem:hover,
@@ -2350,6 +2390,213 @@
 
 .profileDashFooter p {
   margin: 0;
+}
+
+/* ===== LEGAL PAGE ===== */
+.legalPage {
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+.legalPageMain {
+  padding: 108px 24px 80px;
+}
+
+.legalPageContainer {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.legalBackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 36px;
+  transition: color 0.2s ease;
+}
+
+.legalBackBtn:hover {
+  color: #ffffff;
+}
+
+.legalPageHeader {
+  margin-bottom: 44px;
+}
+
+.legalPageBadge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f5a623;
+  background: rgba(245,166,35,0.12);
+  border: 1px solid rgba(245,166,35,0.25);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 14px;
+}
+
+.legalPageHeader h1 {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+}
+
+.legalPageDate {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin: 0 0 18px;
+}
+
+.legalPageIntro {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+}
+
+.legalPageSections {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.legalPageSection {
+  border-left: 2px solid rgba(245,166,35,0.35);
+  padding-left: 20px;
+}
+
+.legalPageSection h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.legalPageSection p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+.legalPageContactSection {
+  margin-bottom: 44px;
+}
+
+.legalPageContactSection h2,
+.legalPageFaqSection h2 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 20px;
+}
+
+.legalPageContactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.legalPageContactCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.legalPageContactIcon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.legalPageContactCard strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.legalPageContactCard p {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  margin: 0 0 6px;
+}
+
+.legalPageContactValue {
+  font-size: 12px;
+  color: #f5a623;
+  font-weight: 500;
+}
+
+.legalPageFaqList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legalPageFaqItem {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.legalPageFaqItem[open] {
+  border-color: rgba(245,166,35,0.3);
+}
+
+.legalPageFaqItem summary {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 16px 18px;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.legalPageFaqItem summary::after {
+  content: "+";
+  font-size: 18px;
+  color: rgba(255,255,255,0.4);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.legalPageFaqItem[open] summary::after {
+  content: "−";
+  color: #f5a623;
+}
+
+.legalPageFaqItem p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.6);
+  padding: 0 18px 16px;
+  margin: 0;
+}
+
+.legalNotFound {
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 80px 0;
 }
 
 /* ===== LISTINGS SECTION ===== */
@@ -4826,5 +5073,204 @@
   
   .heroTitle {
     font-size: 36px;
+  }
+}
+
+.demoAuthPage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(245, 166, 35, 0.2), transparent 38%),
+    radial-gradient(circle at 85% 80%, rgba(90, 170, 255, 0.18), transparent 40%),
+    #0a0a0a;
+}
+
+.demoAuthCard {
+  width: min(920px, 100%);
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(20, 20, 20, 0.9);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
+}
+
+.demoAuthEyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(245, 166, 35, 0.9);
+  margin-bottom: 10px;
+}
+
+.demoAuthCard h1 {
+  font-size: clamp(28px, 4vw, 38px);
+  margin-bottom: 8px;
+}
+
+.demoAuthCard > p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.demoAuthGrid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.demoAuthUserCard {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.demoAuthAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.demoAuthUserCard h2 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.demoAuthUserCard p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2px;
+}
+
+.demoAuthUserCard button {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 700;
+  background: #f5a623;
+  color: #101010;
+}
+
+.demoAuthHint {
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.demoAuthBackBtn {
+  margin-top: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: transparent;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+
+.hostDashMain {
+  display: grid;
+  gap: 16px;
+}
+
+.hostDashStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hostDashStatCard {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 16px;
+}
+
+.hostDashStatCard p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+}
+
+.hostDashStatCard h3 {
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+.hostDashPanel {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hostDashPanel h2 {
+  margin-bottom: 12px;
+}
+
+.hostDashListingGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hostDashListingCard {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+
+.hostDashListingCard img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.hostDashListingCard > div {
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.hostDashListingCard p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+}
+
+.hostDashReservationList {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.hostDashReservationList li {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hostDashReservationList p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .demoAuthGrid,
+  .hostDashStatsGrid,
+  .hostDashListingGrid {
+    grid-template-columns: 1fr;
   }
 }

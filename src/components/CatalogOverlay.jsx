@@ -1,6 +1,7 @@
 import DatePicker from "react-datepicker";
 import { differenceInCalendarDays } from "date-fns";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getOptimizedImageUrl } from "../imageUtils";
 
 const isoToDate = (isoValue) => {
   if (!isoValue) {
@@ -250,7 +251,7 @@ function CatalogOverlay({
       <div className="catalogTopBar">
         <button className="catalogBrand" type="button" onClick={onClose}>
           <div className="logo catalogLogo">
-            <img src={logoImg} alt="Horizon Stays" className="logoImg" />
+            <img src={logoImg} alt="La Villa" className="logoImg" />
           </div>
         </button>
 
@@ -306,7 +307,7 @@ function CatalogOverlay({
                 type="button"
               >
                 <div className="userAvatar">
-                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face" alt="User" />
+                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face" alt="User" loading="lazy" decoding="async" />
                 </div>
               </button>
 
@@ -461,7 +462,17 @@ function CatalogOverlay({
                 type="button"
                 onClick={() => onSelectListing?.(listing.id)}
               >
-                <img src={listing.image} alt={listing.title} />
+                <img
+                  src={getOptimizedImageUrl(listing.image, { width: 720, height: 460, quality: 66 })}
+                  srcSet={[
+                    `${getOptimizedImageUrl(listing.image, { width: 420, height: 270, quality: 62 })} 420w`,
+                    `${getOptimizedImageUrl(listing.image, { width: 720, height: 460, quality: 66 })} 720w`
+                  ].join(", ")}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  alt={listing.title}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="catalogCardContent">
                   <h3>{listing.title}</h3>
                   <p className="catalogCardLocation">{listing.location}</p>

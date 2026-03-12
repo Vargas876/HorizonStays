@@ -2,13 +2,13 @@ function FooterSection({ t, logoImg, footerImage }) {
   return (
     <footer id="footer" className="footer">
       <div className="footerAtmosphere" aria-hidden="true">
-        <img src={footerImage} alt="" className="footerAtmosphereImage" loading="eager" decoding="async" />
+        <img src={footerImage} alt="" className="footerAtmosphereImage" loading="lazy" decoding="async" />
         <div className="footerAtmosphereFade" />
       </div>
 
       <div className="footerMain">
         <div className="footerBrand">
-          <img src={logoImg} alt="Horizon Stays" className="footerLogo" />
+          <img src={logoImg} alt="La Villa" className="footerLogo" loading="lazy" decoding="async" />
           <p>{t.footer.description}</p>
         </div>
 

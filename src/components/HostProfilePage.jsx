@@ -33,7 +33,7 @@ function HostProfilePage({ t, listings, logoImg }) {
       <div className="detailTopBar">
         <button className="catalogBrand" type="button" onClick={() => navigate(-1)}>
           <div className="logo catalogLogo">
-            <img src={logoImg} alt="Horizon Stays" className="logoImg" />
+            <img src={logoImg} alt="La Villa" className="logoImg" />
           </div>
         </button>
       </div>

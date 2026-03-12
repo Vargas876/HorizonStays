@@ -19,7 +19,7 @@ function ExperiencesSection({ t, onSelectExperienceCategory }) {
             src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=560&h=560&fit=crop&crop=face"
             alt={t.experiences.profileImageAlt}
             className="sellerAvatar"
-            loading="eager"
+            loading="lazy"
             decoding="async"
           />
         </button>

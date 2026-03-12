@@ -1,8 +1,7 @@
 export const translations = {
   es: {
     navbar: {
-      logo: "Horizon Stays",
-      home: "Inicio",
+      logo: "La Villa",
       homes: "Casas",
       host: "Sobre mi",
       booking: "Reservas",
@@ -28,7 +27,7 @@ export const translations = {
     authDialog: {
       badge: "Acceso requerido",
       title: "Inicia sesion para reservar",
-      message: "Para continuar con Reservar ahora necesitas una cuenta activa en Horizon Stays.",
+      message: "Para continuar con Reservar ahora necesitas una cuenta activa en La Villa.",
       cancel: "Cancelar",
       confirm: "Iniciar sesion"
     },
@@ -329,8 +328,62 @@ export const translations = {
         removeFavoriteLabel: "Quitar de favoritos"
       },
       footer: {
-        links: ["Politica de Privacidad", "Terminos de Servicio", "Soporte"],
-        rights: "© 2026 Horizon Stays. Todos los derechos reservados."
+        links: [
+          { label: "Politica de Privacidad", path: "/legal/privacy" },
+          { label: "Terminos de Servicio", path: "/legal/terms" },
+          { label: "Soporte", path: "/legal/support" }
+        ],
+        rights: "© 2026 Horizon. Todos los derechos reservados."
+      }
+    },
+    legalPages: {
+      privacy: {
+        badge: "Legal",
+        title: "Política de Privacidad",
+        lastUpdated: "Última actualización: 12 de enero de 2026",
+        intro: "En La Villa valoramos tu privacidad. Este documento explica cómo recopilamos, usamos y protegemos tu información personal cuando utilizas nuestra plataforma.",
+        sections: [
+          { title: "1. Información que recopilamos", body: "Recopilamos información que nos proporcionas directamente al crear una cuenta, realizar una reserva o comunicarte con nosotros. Esto incluye nombre, correo electrónico, número de teléfono, información de pago y preferencias de viaje." },
+          { title: "2. Uso de la información", body: "Utilizamos tu información para gestionar reservas, personalizar tu experiencia, enviarte confirmaciones y actualizaciones relevantes, y mejorar nuestros servicios. No vendemos tu información a terceros." },
+          { title: "3. Cookies", body: "Utilizamos cookies y tecnologías similares para mejorar la funcionalidad de la plataforma, recordar tus preferencias y analizar el tráfico. Puedes controlar el uso de cookies desde la configuración de tu navegador." },
+          { title: "4. Seguridad de los datos", body: "Implementamos medidas técnicas y organizativas apropiadas para proteger tu información contra accesos no autorizados, alteración, divulgación o destrucción." },
+          { title: "5. Tus derechos", body: "Tienes derecho a acceder, corregir o eliminar tu información personal en cualquier momento desde la configuración de tu cuenta. También puedes solicitar la portabilidad de tus datos contactándonos directamente." },
+          { title: "6. Cambios a esta política", body: "Podemos actualizar esta política periódicamente. Te notificaremos por correo electrónico ante cambios significativos. El uso continuo de la plataforma implica tu aceptación." },
+          { title: "7. Contacto", body: "Para preguntas relacionadas con tu privacidad escríbenos a privacidad@horizonstays.com o usa el formulario de contacto en la sección de Soporte." }
+        ]
+      },
+      terms: {
+        badge: "Legal",
+        title: "Términos de Servicio",
+        lastUpdated: "Última actualización: 12 de enero de 2026",
+        intro: "Al acceder o utilizar la plataforma de La Villa, aceptas estar vinculado por estos Términos de Servicio. Léelos detenidamente antes de realizar cualquier reserva.",
+        sections: [
+          { title: "1. Aceptación de los términos", body: "Al registrarte o utilizar nuestros servicios, confirmas que tienes al menos 18 años y que aceptas plenamente estos términos. Si no estás de acuerdo, no debes utilizar la plataforma." },
+          { title: "2. Uso del servicio", body: "La Villa es una plataforma de alojamiento rural y premium en Boyacá. Los usuarios pueden buscar, consultar y reservar propiedades disponibles. El uso de la plataforma con fines fraudulentos o ilegales está estrictamente prohibido." },
+          { title: "3. Reservas y pagos", body: "Las reservas se confirman únicamente tras completar el proceso de pago. Los precios incluyen todos los impuestos aplicables. Nos reservamos el derecho de cancelar reservas en casos de fraude o error de precios." },
+          { title: "4. Cancelaciones", body: "Las cancelaciones realizadas con más de 7 días de antelación recibirán un reembolso completo. Las cancelaciones con menos de 7 días pueden estar sujetas a penalizaciones según la propiedad seleccionada." },
+          { title: "5. Responsabilidad", body: "La Villa actúa como intermediario entre huéspedes y propiedades. No seremos responsables de daños o pérdidas que ocurran durante la estancia más allá de lo estipulado en cada reserva." },
+          { title: "6. Modificaciones", body: "Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios serán comunicados con al menos 15 días de anticipación a través del correo registrado en tu cuenta." }
+        ]
+      },
+      support: {
+        badge: "Soporte",
+        title: "Centro de Ayuda",
+        subtitle: "Estamos aquí para ayudarte en cada paso de tu estancia.",
+        contactTitle: "Canales de contacto",
+        contactOptions: [
+          { icon: "💬", label: "WhatsApp", description: "Respuesta inmediata", value: "+57 310 000 0000" },
+          { icon: "✉️", label: "Correo", description: "Respuesta en menos de 2 horas", value: "hola@horizonstays.com" },
+          { icon: "📸", label: "Instagram", description: "Mensajes directos", value: "@horizonstays" }
+        ],
+        faqTitle: "Preguntas frecuentes",
+        faqItems: [
+          { question: "¿Cómo realizo una reserva?", answer: "Selecciona el alojamiento, elige tus fechas y número de huéspedes, luego haz clic en 'Reservar ahora'. Deberás estar registrado para completar el pago." },
+          { question: "¿Puedo cancelar mi reserva?", answer: "Sí. Puedes cancelar desde 'Mis viajes' en tu perfil. Las cancelaciones con más de 7 días de antelación son completamente gratuitas." },
+          { question: "¿El check-in es presencial?", answer: "Sí, ofrecemos check-in guiado por el anfitrión. Recibirás instrucciones detalladas por correo y WhatsApp al confirmar tu reserva." },
+          { question: "¿Qué incluye el precio por noche?", answer: "El precio incluye todos los servicios indicados en la descripción del alojamiento: ropa de cama, wifi, servicios básicos y los amenities listados." },
+          { question: "¿Puedo llevar mascotas?", answer: "Depende del alojamiento. Cada propiedad especifica si acepta mascotas. Consulta antes de reservar." }
+        ]
       }
     },
     stats: {
@@ -497,14 +550,13 @@ export const translations = {
       supportLinks: ["Como reservar", "Check-in y check-out", "Normas de la casa", "Politica de cancelacion"],
       connectTitle: "Contacto",
       connectLinks: ["WhatsApp", "Correo", "Instagram", "Ubicacion"],
-      brandLine: "© 2026 Horizon y La Villa.",
+      brandLine: "© 2026 Horizon.",
       rights: "Todos los derechos reservados"
     }
   },
   en: {
     navbar: {
-      logo: "Horizon Stays",
-      home: "Home",
+      logo: "La Villa",
       homes: "Homes",
       host: "About me",
       booking: "Bookings",
@@ -530,7 +582,7 @@ export const translations = {
     authDialog: {
       badge: "Access required",
       title: "Sign in to reserve",
-      message: "To continue with Book Now you need an active Horizon Stays account.",
+      message: "To continue with Book Now you need an active La Villa account.",
       cancel: "Cancel",
       confirm: "Sign in"
     },
@@ -831,8 +883,62 @@ export const translations = {
         removeFavoriteLabel: "Remove from favorites"
       },
       footer: {
-        links: ["Privacy Policy", "Terms of Service", "Support"],
-        rights: "© 2026 Horizon Stays. All rights reserved."
+        links: [
+          { label: "Privacy Policy", path: "/legal/privacy" },
+          { label: "Terms of Service", path: "/legal/terms" },
+          { label: "Support", path: "/legal/support" }
+        ],
+        rights: "© 2026 Horizon. All rights reserved."
+      }
+    },
+    legalPages: {
+      privacy: {
+        badge: "Legal",
+        title: "Privacy Policy",
+        lastUpdated: "Last updated: January 12, 2026",
+        intro: "At La Villa we value your privacy. This document explains how we collect, use and protect your personal information when you use our platform.",
+        sections: [
+          { title: "1. Information We Collect", body: "We collect information you provide directly when creating an account, making a booking or contacting us. This includes name, email address, phone number, payment information and travel preferences." },
+          { title: "2. Use of Information", body: "We use your information to manage bookings, personalize your experience, send relevant confirmations and updates, and improve our services. We do not sell your information to third parties." },
+          { title: "3. Cookies", body: "We use cookies and similar technologies to improve platform functionality, remember your preferences and analyze traffic. You can control cookie usage from your browser settings." },
+          { title: "4. Data Security", body: "We implement appropriate technical and organizational measures to protect your information against unauthorized access, alteration, disclosure or destruction." },
+          { title: "5. Your Rights", body: "You have the right to access, correct or delete your personal information at any time from your account settings. You may also request data portability by contacting us directly." },
+          { title: "6. Policy Changes", body: "We may update this policy periodically. We will notify you by email of significant changes. Continued use of the platform after updates implies your acceptance." },
+          { title: "7. Contact", body: "For privacy-related questions you can write to us at privacy@horizonstays.com or use the contact form in the Support section." }
+        ]
+      },
+      terms: {
+        badge: "Legal",
+        title: "Terms of Service",
+        lastUpdated: "Last updated: January 12, 2026",
+        intro: "By accessing or using the La Villa platform, you agree to be bound by these Terms of Service. Please read them carefully before making any booking.",
+        sections: [
+          { title: "1. Acceptance of Terms", body: "By registering or using our services, you confirm that you are at least 18 years old and fully accept these terms. If you disagree, you should not use the platform." },
+          { title: "2. Use of the Service", body: "La Villa is a rural and premium accommodation platform in Boyacá. Users can search, browse and book available properties. Use of the platform for fraudulent or illegal purposes is strictly prohibited." },
+          { title: "3. Bookings and Payments", body: "Bookings are confirmed only after completing the payment process. Prices include all applicable taxes. We reserve the right to cancel bookings in cases of fraud or pricing errors." },
+          { title: "4. Cancellations", body: "Cancellations made more than 7 days in advance will receive a full refund. Cancellations within 7 days may be subject to penalties depending on the selected property." },
+          { title: "5. Liability", body: "La Villa acts as an intermediary between guests and properties. We will not be liable for damages or losses occurring during the stay beyond what is stipulated in each booking." },
+          { title: "6. Modifications", body: "We reserve the right to modify these terms at any time. Changes will be communicated at least 15 days in advance via the email registered in your account." }
+        ]
+      },
+      support: {
+        badge: "Support",
+        title: "Help Center",
+        subtitle: "We are here to help you at every step of your stay.",
+        contactTitle: "Contact channels",
+        contactOptions: [
+          { icon: "💬", label: "WhatsApp", description: "Immediate response", value: "+57 310 000 0000" },
+          { icon: "✉️", label: "Email", description: "Response within 2 hours", value: "hello@horizonstays.com" },
+          { icon: "📸", label: "Instagram", description: "Direct messages", value: "@horizonstays" }
+        ],
+        faqTitle: "Frequently asked questions",
+        faqItems: [
+          { question: "How do I make a booking?", answer: "Select a stay, choose your dates and number of guests, then click 'Book now'. You will need to be registered to complete payment." },
+          { question: "Can I cancel my booking?", answer: "Yes. You can cancel from 'My trips' in your profile. Cancellations made more than 7 days in advance are completely free." },
+          { question: "Is check-in in person?", answer: "Yes, we offer host-guided check-in. You will receive detailed instructions by email and WhatsApp upon confirming your booking." },
+          { question: "What does the nightly price include?", answer: "The price includes all services listed in the stay description: bed linen, wifi, basic services and the listed amenities." },
+          { question: "Can I bring pets?", answer: "It depends on the property. Each property specifies whether pets are allowed. Please check before booking." }
+        ]
       }
     },
     stats: {
@@ -999,7 +1105,7 @@ export const translations = {
       supportLinks: ["How to book", "Check-in and check-out", "House rules", "Cancellation policy"],
       connectTitle: "Contact",
       connectLinks: ["WhatsApp", "Email", "Instagram", "Location"],
-      brandLine: "© 2026 Horizon and La Villa.",
+      brandLine: "© 2026 Horizon.",
       rights: "All rights reserved"
     }
   }

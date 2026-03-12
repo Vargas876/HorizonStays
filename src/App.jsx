@@ -1,17 +1,23 @@
 import "./App.css";
-import { useState, useMemo, useRef } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { lazy, Suspense, useState, useMemo, useRef } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { listings } from "./data";
 import { translations } from "./translations";
 import logoImg from "./assets/logo.png";
 import footerImage from "./assets/footer.jpg";
+import { demoUsers, getDashboardPathForRole } from "./demoUsers";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import ListingsSection from "./components/ListingsSection";
 import ExperiencesSection from "./components/ExperiencesSection";
 import FooterSection from "./components/FooterSection";
-import StayDetailPage from "./components/StayDetailPage";
-import CatalogOverlay from "./components/CatalogOverlay";
+
+const StayDetailPage = lazy(() => import("./components/StayDetailPage"));
+const CatalogOverlay = lazy(() => import("./components/CatalogOverlay"));
+const ProfileDashboardPage = lazy(() => import("./components/ProfileDashboardPage"));
+const HostDashboardPage = lazy(() => import("./components/HostDashboardPage"));
+const AuthDemoPage = lazy(() => import("./components/AuthDemoPage"));
+const LegalPage = lazy(() => import("./components/LegalPage"));
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -72,7 +78,7 @@ const buildUnavailableDatesForListing = (listingId, baseDate) => {
 function App() {
   const navigate = useNavigate();
   const [language, setLanguage] = useState("es");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [favoriteListingIds, setFavoriteListingIds] = useState([]);
   const [checkInDate, setCheckInDate] = useState("");
@@ -93,6 +99,11 @@ function App() {
   
   const userMenuRef = useRef(null);
   const t = translations[language];
+  const currentUser = useMemo(
+    () => demoUsers.find((user) => user.id === currentUserId) || null,
+    [currentUserId]
+  );
+  const isAuthenticated = Boolean(currentUser);
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === "en" ? "es" : "en"));
@@ -106,13 +117,47 @@ function App() {
 
   const handleUserMenuAction = (actionKey) => {
     setIsUserMenuOpen(false);
+
+    const role = currentUser?.role || "client";
+    const baseDashboardPath = getDashboardPathForRole(role);
+
     if (actionKey === "logout") {
-      setIsAuthenticated(false);
+      setCurrentUserId(null);
+      navigate("/");
+    } else if (actionKey === "profile") {
+      navigate(role === "host"
+        ? `${baseDashboardPath}?section=overview`
+        : `${baseDashboardPath}?section=personal`);
+    } else if (actionKey === "bookings") {
+      navigate(role === "host"
+        ? `${baseDashboardPath}?section=reservations`
+        : `${baseDashboardPath}?section=trips`);
+    } else if (actionKey === "saved") {
+      navigate(role === "host"
+        ? `${baseDashboardPath}?section=properties`
+        : `${baseDashboardPath}?section=favorites`);
+    } else if (actionKey === "settings") {
+      navigate(role === "host"
+        ? `${baseDashboardPath}?section=settings`
+        : `${baseDashboardPath}?section=security`);
+    } else if (actionKey === "help") {
+      navigate("/legal/support");
     }
   };
 
   const handleAuthAction = () => {
-    setIsAuthenticated(true);
+    navigate("/demo-login");
+  };
+
+  const handleSelectDemoUser = (userId) => {
+    const selectedUser = demoUsers.find((user) => user.id === userId);
+    if (!selectedUser) {
+      return;
+    }
+
+    setCurrentUserId(selectedUser.id);
+    setIsUserMenuOpen(false);
+    navigate(getDashboardPathForRole(selectedUser.role));
   };
 
   const todayIso = useMemo(() => toIsoDate(new Date()), []);
@@ -308,6 +353,8 @@ function App() {
     setAvailabilityResult(null);
   };
 
+  const routeFallback = <div className="pageLoadingState">Cargando...</div>;
+
   const handleSelectListing = (listingId) => {
     navigate(`/stay/${listingId}`);
   };
@@ -315,35 +362,137 @@ function App() {
   return (
     <Routes>
       <Route
+        path="/demo-login"
+        element={
+          isAuthenticated ? (
+            <Navigate to={getDashboardPathForRole(currentUser.role)} replace />
+          ) : (
+            <Suspense fallback={routeFallback}>
+              <AuthDemoPage
+                t={t}
+                language={language}
+                onSelectUser={handleSelectDemoUser}
+              />
+            </Suspense>
+          )
+        }
+      />
+      <Route
+        path="/legal/:pageKey"
+        element={
+          <Suspense fallback={routeFallback}>
+            <LegalPage
+              t={t}
+              language={language}
+              onToggleLanguage={toggleLanguage}
+              isUserMenuOpen={isUserMenuOpen}
+              setIsUserMenuOpen={setIsUserMenuOpen}
+              userMenuRef={userMenuRef}
+              logoImg={logoImg}
+              onUserMenuAction={handleUserMenuAction}
+              isAuthenticated={isAuthenticated}
+              onAuthAction={handleAuthAction}
+              currentUser={currentUser}
+            />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          isAuthenticated
+            ? <Navigate to={getDashboardPathForRole(currentUser.role)} replace />
+            : <Navigate to="/demo-login" replace />
+        }
+      />
+      <Route
+        path="/dashboard/client"
+        element={
+          !isAuthenticated
+            ? <Navigate to="/demo-login" replace />
+            : currentUser.role !== "client"
+              ? <Navigate to={getDashboardPathForRole(currentUser.role)} replace />
+              : (
+                <Suspense fallback={routeFallback}>
+                  <ProfileDashboardPage
+                    t={t}
+                    language={language}
+                    onToggleLanguage={toggleLanguage}
+                    isUserMenuOpen={isUserMenuOpen}
+                    setIsUserMenuOpen={setIsUserMenuOpen}
+                    userMenuRef={userMenuRef}
+                    logoImg={logoImg}
+                    onUserMenuAction={handleUserMenuAction}
+                    listings={listings}
+                    favoriteListingIds={favoriteListingIds}
+                    onToggleFavorite={toggleFavoriteListing}
+                    isAuthenticated={isAuthenticated}
+                    onAuthAction={handleAuthAction}
+                    currentUser={currentUser}
+                  />
+                </Suspense>
+              )
+        }
+      />
+      <Route
+        path="/dashboard/host"
+        element={
+          !isAuthenticated
+            ? <Navigate to="/demo-login" replace />
+            : currentUser.role !== "host"
+              ? <Navigate to={getDashboardPathForRole(currentUser.role)} replace />
+              : (
+                <Suspense fallback={routeFallback}>
+                  <HostDashboardPage
+                    t={t}
+                    language={language}
+                    onToggleLanguage={toggleLanguage}
+                    isUserMenuOpen={isUserMenuOpen}
+                    setIsUserMenuOpen={setIsUserMenuOpen}
+                    userMenuRef={userMenuRef}
+                    logoImg={logoImg}
+                    onUserMenuAction={handleUserMenuAction}
+                    listings={listings}
+                    isAuthenticated={isAuthenticated}
+                    onAuthAction={handleAuthAction}
+                    currentUser={currentUser}
+                  />
+                </Suspense>
+              )
+        }
+      />
+      <Route
         path="/stay/:listingId"
         element={
-          <StayDetailPage
-            t={t}
-            language={language}
-            heroFilters={heroFilters}
-            checkInDate={checkInDate}
-            checkOutDate={checkOutDate}
-            onFilterChange={handleHeroFilterChange}
-            onChangeCheckIn={(value) => {
-              setCheckInDate(value);
-              if (checkOutDate && value && checkOutDate <= value) {
-                setCheckOutDate(toIsoDate(addDays(new Date(`${value}T00:00:00`), 1)));
-              }
-            }}
-            onChangeCheckOut={setCheckOutDate}
-            onToggleLanguage={toggleLanguage}
-            isUserMenuOpen={isUserMenuOpen}
-            setIsUserMenuOpen={setIsUserMenuOpen}
-            userMenuRef={userMenuRef}
-            onUserMenuAction={handleUserMenuAction}
-            isAuthenticated={isAuthenticated}
-            onAuthAction={handleAuthAction}
-            onReserveNow={() => {}}
-            onReservationConfirmed={() => {}}
-            listings={listings}
-            logoImg={logoImg}
-            perNightLabel={t.listings.perNight}
-          />
+          <Suspense fallback={routeFallback}>
+            <StayDetailPage
+              t={t}
+              language={language}
+              heroFilters={heroFilters}
+              checkInDate={checkInDate}
+              checkOutDate={checkOutDate}
+              onFilterChange={handleHeroFilterChange}
+              onChangeCheckIn={(value) => {
+                setCheckInDate(value);
+                if (checkOutDate && value && checkOutDate <= value) {
+                  setCheckOutDate(toIsoDate(addDays(new Date(`${value}T00:00:00`), 1)));
+                }
+              }}
+              onChangeCheckOut={setCheckOutDate}
+              onToggleLanguage={toggleLanguage}
+              isUserMenuOpen={isUserMenuOpen}
+              setIsUserMenuOpen={setIsUserMenuOpen}
+              userMenuRef={userMenuRef}
+              onUserMenuAction={handleUserMenuAction}
+              isAuthenticated={isAuthenticated}
+              onAuthAction={handleAuthAction}
+              onReserveNow={() => {}}
+              onReservationConfirmed={() => {}}
+              listings={listings}
+              logoImg={logoImg}
+              perNightLabel={t.listings.perNight}
+            />
+          </Suspense>
         }
       />
       <Route
@@ -361,6 +510,7 @@ function App() {
         onUserMenuAction={handleUserMenuAction}
         isAuthenticated={isAuthenticated}
         onAuthAction={handleAuthAction}
+        currentUser={currentUser}
       />
 
       <HeroSection
@@ -404,36 +554,38 @@ function App() {
       <FooterSection t={t} logoImg={logoImg} footerImage={footerImage} />
 
       {isCatalogOpen && (
-        <CatalogOverlay
-          t={t}
-          language={language}
-          heroFilters={heroFilters}
-          checkInDate={checkInDate}
-          checkOutDate={checkOutDate}
-          minCheckIn={todayIso}
-          onChangeCheckIn={setCheckInDate}
-          onChangeCheckOut={setCheckOutDate}
-          catalogFilters={catalogFilters}
-          catalogListings={catalogListings}
-          onFilterChange={handleHeroFilterChange}
-          onCatalogFilterChange={handleCatalogFilterChange}
-          onToggleService={toggleCatalogService}
-          onSearch={() => {}}
-          onSelectListing={(listingId) => {
-            setIsCatalogOpen(false);
-            handleSelectListing(listingId);
-          }}
-          perNightLabel={t.listings.perNight}
-          onToggleLanguage={toggleLanguage}
-          isUserMenuOpen={isUserMenuOpen}
-          setIsUserMenuOpen={setIsUserMenuOpen}
-          userMenuRef={userMenuRef}
-          onUserMenuAction={handleUserMenuAction}
-          isAuthenticated={isAuthenticated}
-          onAuthAction={handleAuthAction}
-          onClose={() => setIsCatalogOpen(false)}
-          logoImg={logoImg}
-        />
+        <Suspense fallback={routeFallback}>
+          <CatalogOverlay
+            t={t}
+            language={language}
+            heroFilters={heroFilters}
+            checkInDate={checkInDate}
+            checkOutDate={checkOutDate}
+            minCheckIn={todayIso}
+            onChangeCheckIn={setCheckInDate}
+            onChangeCheckOut={setCheckOutDate}
+            catalogFilters={catalogFilters}
+            catalogListings={catalogListings}
+            onFilterChange={handleHeroFilterChange}
+            onCatalogFilterChange={handleCatalogFilterChange}
+            onToggleService={toggleCatalogService}
+            onSearch={() => {}}
+            onSelectListing={(listingId) => {
+              setIsCatalogOpen(false);
+              handleSelectListing(listingId);
+            }}
+            perNightLabel={t.listings.perNight}
+            onToggleLanguage={toggleLanguage}
+            isUserMenuOpen={isUserMenuOpen}
+            setIsUserMenuOpen={setIsUserMenuOpen}
+            userMenuRef={userMenuRef}
+            onUserMenuAction={handleUserMenuAction}
+            isAuthenticated={isAuthenticated}
+            onAuthAction={handleAuthAction}
+            onClose={() => setIsCatalogOpen(false)}
+            logoImg={logoImg}
+          />
+        </Suspense>
       )}
     </div>
         }

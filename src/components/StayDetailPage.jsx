@@ -2,6 +2,7 @@ import DatePicker from "react-datepicker";
 import { addDays, differenceInCalendarDays } from "date-fns";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getOptimizedImageUrl } from "../imageUtils";
 
 const parseIsoDate = (isoValue) => {
   if (!isoValue) {
@@ -238,6 +239,16 @@ function StayDetailPage({
     "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=500&fit=crop",
     "https://images.unsplash.com/photo-1494526585095-c41746248156?w=800&h=500&fit=crop"
   ];
+
+  const optimizedDetailHeroImages = useMemo(
+    () => detailImages.map((image) => getOptimizedImageUrl(image, { width: 1400, height: 850, quality: 68 })),
+    [detailImages]
+  );
+
+  const optimizedDetailThumbImages = useMemo(
+    () => detailImages.map((image) => getOptimizedImageUrl(image, { width: 360, height: 220, quality: 62 })),
+    [detailImages]
+  );
 
   const formatPrice = (rawPrice) => {
     const [amount] = rawPrice.split("/");
@@ -492,7 +503,7 @@ function StayDetailPage({
       <div className="detailTopBar">
         <button className="catalogBrand" type="button" onClick={() => navigate("/")}>
           <div className="logo catalogLogo">
-            <img src={logoImg} alt="Horizon Stays" className="logoImg" />
+            <img src={logoImg} alt="La Villa" className="logoImg" />
           </div>
         </button>
 
@@ -581,7 +592,14 @@ function StayDetailPage({
         <div className="detailLayout">
           <div className="detailMainColumn">
             <div className="detailHeroImageWrap">
-              <img src={detailImages[activeImageIndex]} alt={listing.title} className="detailHeroImage" />
+              <img
+                src={optimizedDetailHeroImages[activeImageIndex]}
+                alt={listing.title}
+                className="detailHeroImage"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+              />
               <button className="detailSlideNav prev" type="button" onClick={prevImage}>‹</button>
               <button className="detailSlideNav next" type="button" onClick={nextImage}>›</button>
               <span className="detailCounter">{`${activeImageIndex + 1} / ${detailImages.length}`}</span>
@@ -595,7 +613,7 @@ function StayDetailPage({
                   type="button"
                   onClick={() => setActiveImageIndex(index)}
                 >
-                  <img src={image} alt={listing.title} className="detailThumb" />
+                  <img src={optimizedDetailThumbImages[index]} alt={listing.title} className="detailThumb" loading="lazy" decoding="async" />
                 </button>
               ))}
             </div>
@@ -681,7 +699,7 @@ function StayDetailPage({
                 </div>
 
                 <div className="detailOfferPanel">
-                  <img src={detailImages[3]} alt={listing.title} />
+                  <img src={optimizedDetailHeroImages[3]} alt={listing.title} loading="lazy" decoding="async" />
                   <ul>
                     {translatedAmenities.slice(0, 5).map((amenity) => (
                       <li key={amenity}>• {amenity}</li>
@@ -694,8 +712,8 @@ function StayDetailPage({
             {activeTab === "details" && (
               <>
                 <div className="detailRoomGallery">
-                  {detailImages.slice(1, 4).map((image) => (
-                    <img key={`${image}-room`} src={image} alt={listing.title} />
+                  {optimizedDetailHeroImages.slice(1, 4).map((image, index) => (
+                    <img key={`${image}-room`} src={image} alt={listing.title} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
                   ))}
                 </div>
 

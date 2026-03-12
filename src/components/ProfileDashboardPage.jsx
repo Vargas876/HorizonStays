@@ -1,6 +1,6 @@
 import Navbar from "./Navbar";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 function ProfileDashboardPage({
   t,
@@ -15,7 +15,8 @@ function ProfileDashboardPage({
   favoriteListingIds = [],
   onToggleFavorite,
   isAuthenticated,
-  onAuthAction
+  onAuthAction,
+  currentUser
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -128,7 +129,7 @@ function ProfileDashboardPage({
   }, [sectionFromQuery, activeSidebarKey]);
 
   const openAllStaysOverlay = () => {
-    navigate("/alojamientos?maxPrice=350&minGuests=any");
+    navigate("/");
   };
 
   return (
@@ -144,6 +145,7 @@ function ProfileDashboardPage({
         onUserMenuAction={onUserMenuAction}
         isAuthenticated={isAuthenticated}
         onAuthAction={onAuthAction}
+        currentUser={currentUser}
       />
 
       <main className="profileDashLayout">
@@ -153,6 +155,8 @@ function ProfileDashboardPage({
               className="profileDashUserPhoto"
               src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face"
               alt={profile.user.name}
+              loading="lazy"
+              decoding="async"
             />
             <div>
               <h2>{profile.user.name}</h2>
@@ -219,6 +223,8 @@ function ProfileDashboardPage({
                     <img
                       src={trip.image}
                       alt={trip.title}
+                      loading="lazy"
+                      decoding="async"
                       onError={(event) => {
                         event.currentTarget.onerror = null;
                         event.currentTarget.src = fallbackTripImage;
@@ -233,7 +239,7 @@ function ProfileDashboardPage({
                         <button
                           type="button"
                           className="primary"
-                          onClick={() => navigate(`/alojamientos/${trip.listingId}`)}
+                          onClick={() => navigate(`/stay/${trip.listingId}`)}
                         >
                           {profile.detailsButton}
                         </button>
@@ -565,7 +571,7 @@ function ProfileDashboardPage({
                 <div className="profileDashFavoritesGrid">
                   {favoriteListings.map((listing) => (
                     <article key={`favorite-${listing.id}`} className="profileDashFavoriteCard">
-                      <img src={listing.image} alt={listing.title} />
+                      <img src={listing.image} alt={listing.title} loading="lazy" decoding="async" />
                       <button
                         type="button"
                         className="profileDashFavoriteHeart"
@@ -588,7 +594,7 @@ function ProfileDashboardPage({
                           <button
                             type="button"
                             className="profileDashPrimaryBtn"
-                            onClick={() => navigate(`/alojamientos/${listing.id}`)}
+                            onClick={() => navigate(`/stay/${listing.id}`)}
                           >
                             {profile.favorites.viewButton}
                           </button>
@@ -613,10 +619,10 @@ function ProfileDashboardPage({
       </main>
 
       <footer className="profileDashFooter">
-        <div className="profileDashFooterBrand">Horizon Stays</div>
+        <div className="profileDashFooterBrand">La Villa</div>
         <div className="profileDashFooterLinks">
           {profile.footer.links.map((link) => (
-            <a key={link} href="#">{link}</a>
+            <Link key={link.path} to={link.path}>{link.label}</Link>
           ))}
         </div>
         <p>{profile.footer.rights}</p>
